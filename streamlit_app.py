@@ -1,4 +1,5 @@
 from datetime import date, timedelta
+from typing import List
 
 import streamlit as st
 
@@ -56,12 +57,22 @@ next_deliverable = st.text_input("Deliverable: task AND communication method")
 
 deliverable_date = st.date_input("Deliverable date", value=default_date)
 
-st.write(f"## We are {color_map[status]} to complete {project_name} by {completion_date}.")
+content: List[str] = []
+
+content += [f"## We are {color_map[status]} to complete {project_name} by {completion_date}."]
 
 if red_blocker:
-    st.write(f"## I am {RED} and not {GREEN} because {red_blocker}.")
+    content += [f"## I am {RED} and not {GREEN} because {red_blocker}."]
 
-st.write(f"## The next action is for {deliverer} to {next_deliverable} by {deliverable_date}")
+content += [f"## The next action is for {deliverer} to {next_deliverable} by {deliverable_date}"]
 
 if stumbling_block and mitigation_plan:
-    st.write(f"## A potential future challenge is {stumbling_block}. My plan to mitigate is {mitigation_plan}.")
+    content += [f"## A potential future challenge is {stumbling_block}. My plan to mitigate is {mitigation_plan}."]
+
+all_content = "\n".join(content)
+
+st.write(all_content)
+
+with st.expander("Show copiable text"):
+    st.code(all_content.replace("## ", ""))
+
